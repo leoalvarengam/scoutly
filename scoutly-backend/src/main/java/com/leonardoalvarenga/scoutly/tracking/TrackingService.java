@@ -1,0 +1,53 @@
+package com.leonardoalvarenga.scoutly.tracking;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class TrackingService {
+    private final TrackedProductRepository repository;
+
+    public TrackingResponseDTO add(TrackingRequestDTO dto){
+        TrackedProduct entity = new TrackedProduct();
+        entity.setName(dto.name());
+        entity.setUrl(dto.url());
+        entity.setTargetPrice(dto.targetPrice());
+
+        TrackedProduct savedEntity = repository.save(entity);
+
+        return new TrackingResponseDTO(
+                savedEntity.getId(),
+                savedEntity.getName(),
+                savedEntity.getUrl(),
+                savedEntity.getTargetPrice(),
+                savedEntity.isActive()
+        );
+    }
+
+    public List<TrackingRequestDTO> findAll(){
+        return repository.findAll()
+                .stream()
+                .map(product -> new TrackingRequestDTO(
+                        product.getName(),
+                        product.getUrl(),
+                        product.getTargetPrice()
+                ))
+                .toList();
+    }
+
+    public void delete (UUID id){
+        repository.deleteById(id);
+    }
+
+    public void deactivateAlert(UUID id){
+        TrackedProduct product = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tracked product not found"));
+        product.deactivateAlert();
+
+        repository.save(product);
+    }
+}
