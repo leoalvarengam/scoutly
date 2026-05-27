@@ -22,8 +22,8 @@ public class TrackingController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TrackingRequestDTO>> get(){
-        List<TrackingRequestDTO> productsList = service.findAll();
+    public ResponseEntity<List<TrackingResponseDTO>> get(){
+        List<TrackingResponseDTO> productsList = service.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(productsList);
     }
 

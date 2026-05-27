@@ -30,13 +30,15 @@ public class TrackingService {
         );
     }
 
-    public List<TrackingRequestDTO> findAll(){
+    public List<TrackingResponseDTO> findAll(){
         return repository.findAll()
                 .stream()
-                .map(product -> new TrackingRequestDTO(
+                .map(product -> new TrackingResponseDTO(
+                        product.getId(),
                         product.getName(),
                         product.getUrl(),
-                        product.getTargetPrice()
+                        product.getTargetPrice(),
+                        product.isActive()
                 ))
                 .toList();
     }
