@@ -34,7 +34,7 @@ public class TrackingController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<TrackedProduct> deactivateAlert(@PathVariable UUID id){
+    public ResponseEntity<Void> deactivateAlert(@PathVariable UUID id){
         service.deactivateAlert(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
