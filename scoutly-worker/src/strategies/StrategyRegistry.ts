@@ -1,5 +1,5 @@
-import { IScraperStrategy } from "../domain/IScraperStrategy";
-import { MercadoLivreStrategy } from "./MercadoLivreStrategy";
+import { IScraperStrategy } from "../domain/IScraperStrategy.js";
+import { MercadoLivreStrategy } from "./MercadoLivreStrategy.js";
 
 const strategies: Map<string, IScraperStrategy> = new Map([
   ["mercadolivre.com.br", new MercadoLivreStrategy()],
