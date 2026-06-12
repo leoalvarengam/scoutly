@@ -11,6 +11,25 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - scoutly-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: scoutly-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: scoutly_user
+      RABBITMQ_DEFAULT_PASS: scoutly_pass
+    networks:
+      - scoutly-network
 
 volumes:
   postgres_data:
+
+networks:
+  scoutly-network:
+    driver: bridge
