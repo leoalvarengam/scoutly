@@ -11,6 +11,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tracking")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class TrackingController {
     private final TrackingService service;
