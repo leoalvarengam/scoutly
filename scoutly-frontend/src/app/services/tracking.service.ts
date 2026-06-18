@@ -1,9 +1,32 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import {
+  TrackingRequestDTO,
+  TrackingResponseDTO,
+} from '../models/tracking.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TrackingService {
+  private http = inject(HttpClient);
 
-  constructor() { }
+  private apiUrl = 'http://localhost:8080/api/tracking';
+
+  getTrackedProducts(): Observable<TrackingResponseDTO[]> {
+    return this.http.get<TrackingResponseDTO[]>(this.apiUrl);
+  }
+
+  addTrackedProduct(data: TrackingRequestDTO): Observable<TrackingResponseDTO> {
+    return this.http.post<TrackingResponseDTO>(this.apiUrl, data);
+  }
+
+  deactivateAlert(id: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${id}/status`, {});
+  }
+
+  deleteProduct(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
