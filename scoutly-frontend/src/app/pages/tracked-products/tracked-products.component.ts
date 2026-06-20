@@ -22,6 +22,7 @@ export class TrackedProductsComponent {
 
   products: TrackingResponseDTO[] = [];
   trackingForm: FormGroup;
+  apiErrorMessage: string | null = null;
 
   constructor() {
     this.trackingForm = this.fb.group({
@@ -44,6 +45,8 @@ export class TrackedProductsComponent {
 
   onSubmit(): void {
     if (this.trackingForm.valid) {
+      this.apiErrorMessage = null;
+
       this.trackingService
         .addTrackedProduct(this.trackingForm.value)
         .subscribe({
@@ -51,7 +54,16 @@ export class TrackedProductsComponent {
             this.loadProducts();
             this.trackingForm.reset();
           },
-          error: (err) => console.error('Erro ao cadastrar', err),
+          error: (err) => {
+            console.error('Erro ao cadastrar', err);
+            if (err.status === 400) {
+              this.apiErrorMessage =
+                'Esta loja ainda não é suportada pelo Scoutly.';
+            } else {
+              this.apiErrorMessage =
+                'Ocorreu um erro no servidor. Tente novamente.';
+            }
+          },
         });
     }
   }

@@ -19,8 +19,14 @@ public class TrackingService {
 
     private final TrackedProductRepository repository;
     private final RabbitTemplate rabbitTemplate;
+    private final List<String> supportedDomains = List.of("books.toscrape.com");
 
     public TrackingResponseDTO add(TrackingRequestDTO dto) {
+
+        String domain = extractDomain(dto.url());
+        if(!supportedDomains.contains(domain)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loja não suportada");
+        }
 
         TrackedProduct entity = new TrackedProduct();
 
@@ -96,5 +102,15 @@ public class TrackingService {
         product.addPriceHistory(history);
 
         repository.save(product);
+    }
+
+    private String extractDomain(String urlString) {
+        try{
+            java.net.URI uri = new java.net.URI(urlString);
+            String domain = uri.getHost();
+            return domain.startsWith("www.") ? domain.substring(4) : domain;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "URL inválida");
+        }
     }
 }

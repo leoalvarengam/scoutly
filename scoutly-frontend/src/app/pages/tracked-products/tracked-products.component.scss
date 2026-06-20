@@ -317,7 +317,24 @@
         background: var(--bg-tertiary);
       }
     }
+
+    .btn-delete {
+      background-color: rgb(247, 66, 66);
+      color: white;
+
+      &:hover {
+        background-color: rgb(165, 57, 57);
+      }
+    }
   }
+}
+
+.error-message {
+  color: var(--color-yellow-dark);
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: block;
 }
 
 .text-green {

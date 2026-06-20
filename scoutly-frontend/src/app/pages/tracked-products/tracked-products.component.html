@@ -26,8 +26,13 @@
             type="url"
             id="url"
             formControlName="url"
-            placeholder="Cole o link do produto que deseja monitorar"
+            (input)="apiErrorMessage = null"
+            placeholder="Cole o link do produto"
           />
+
+          @if (apiErrorMessage) {
+            <small class="error-message">{{ apiErrorMessage }}</small>
+          }
         </div>
 
         <div class="form-row">
@@ -58,7 +63,6 @@
           [disabled]="trackingForm.invalid"
         >
           <span>Começar Rastreamento</span>
-          <span class="btn-icon">⚡</span>
         </button>
       </form>
     </div>
@@ -91,7 +95,7 @@
             </div>
             <h3 class="product-title">{{ product.name }}</h3>
             <a [href]="product.url" target="_blank" class="product-link"
-              >Ver link original 🔗</a
+              >Acessar link do produto</a
             >
           </div>
 
@@ -124,7 +128,7 @@
               (click)="deleteProduct(product.id)"
               title="Excluir Alerta"
             >
-              🗑️ <span>Excluir</span>
+              <span>Excluir</span>
             </button>
             @if (product.active) {
               <button
@@ -132,7 +136,7 @@
                 (click)="deactivate(product.id)"
                 title="Desativar Alerta"
               >
-                ⏸️ <span>Pausar</span>
+                <span>Pausar</span>
               </button>
             }
           </div>
