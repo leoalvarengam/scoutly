@@ -108,7 +108,8 @@
               >
                 {{
                   product.currentPrice
-                    ? "R$ " + product.currentPrice
+                    ? (product.currentPrice
+                      | currency: "BRL" : "symbol" : "1.2-2")
                     : "Buscando..."
                 }}
               </span>
@@ -116,9 +117,9 @@
 
             <div class="price-box target-price">
               <span class="price-label">Preço Alvo</span>
-              <span class="price-value text-yellow"
-                >R$ {{ product.targetPrice }}</span
-              >
+              <span class="price-value text-yellow">
+                {{ product.targetPrice | currency: "BRL" : "symbol" : "1.2-2" }}
+              </span>
             </div>
           </div>
 
