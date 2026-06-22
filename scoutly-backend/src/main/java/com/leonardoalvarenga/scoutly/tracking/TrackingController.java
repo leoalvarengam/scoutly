@@ -35,9 +35,9 @@ public class TrackingController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> deactivateAlert(@PathVariable UUID id){
-        service.deactivateAlert(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void toggleStatus(@PathVariable UUID id){
+        service.toggleStatus(id);
     }
 
     @PostMapping("/webhook/price")

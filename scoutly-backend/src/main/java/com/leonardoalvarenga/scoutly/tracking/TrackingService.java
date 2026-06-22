@@ -81,10 +81,11 @@ public class TrackingService {
         repository.deleteById(id);
     }
 
-    public void deactivateAlert(UUID id) {
+    public void toggleStatus(UUID id) {
         TrackedProduct product = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        product.deactivateAlert();
+
+        product.setActive(!product.isActive());
 
         repository.save(product);
     }

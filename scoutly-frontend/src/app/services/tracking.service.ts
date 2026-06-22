@@ -22,7 +22,7 @@ export class TrackingService {
     return this.http.post<TrackingResponseDTO>(this.apiUrl, data);
   }
 
-  deactivateAlert(id: string): Observable<void> {
+  toggleStatus(id: string): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/status`, {});
   }
 

@@ -131,15 +131,15 @@
             >
               <span>Excluir</span>
             </button>
-            @if (product.active) {
-              <button
-                class="btn-action btn-deactivate"
-                (click)="deactivate(product.id)"
-                title="Desativar Alerta"
-              >
-                <span>Pausar</span>
-              </button>
-            }
+
+            <button
+              class="btn-action btn-toggle"
+              (click)="toggleStatus(product.id)"
+              [title]="product.active ? 'Pausar Alerta' : 'Reativar Alerta'"
+            >
+              <span *ngIf="product.active">⏸ Pausar</span>
+              <span *ngIf="!product.active">▶ Reativar</span>
+            </button>
           </div>
         </div>
       } @empty {

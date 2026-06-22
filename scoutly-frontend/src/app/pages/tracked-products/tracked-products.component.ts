@@ -75,8 +75,8 @@ export class TrackedProductsComponent {
     });
   }
 
-  deactivate(id: string): void {
-    this.trackingService.deactivateAlert(id).subscribe({
+  toggleStatus(id: string): void {
+    this.trackingService.toggleStatus(id).subscribe({
       next: () => this.loadProducts(),
       error: (err) => console.error('Erro ao pausar alerta', err),
     });

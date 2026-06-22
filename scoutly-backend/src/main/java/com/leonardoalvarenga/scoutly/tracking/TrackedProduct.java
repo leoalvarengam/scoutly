@@ -38,6 +38,7 @@ public class TrackedProduct {
     @Column(name = "target_price", nullable = false)
     private BigDecimal targetPrice;
 
+    @Setter
     @Column(nullable = false)
     private boolean active = true;
 
