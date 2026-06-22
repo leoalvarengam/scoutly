@@ -27,12 +27,30 @@
             id="url"
             formControlName="url"
             (input)="apiErrorMessage = null"
-            placeholder="Cole o link do produto"
+            placeholder="Cole o link do Mercado Livre, Amazon ou Books to Scrape..."
           />
 
-          @if (apiErrorMessage) {
-            <small class="error-message">{{ apiErrorMessage }}</small>
-          }
+          <div class="supported-stores">
+            <span class="store-label">Lojas compatíveis:</span>
+
+            <span class="store-badge">
+              <img
+                src="https://imgs.search.brave.com/bg8ofBVym4MNAHCfdifc06KG46bnC625np9T2ttjC0o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzQwLzIvYW1hem9u/LWljb24tbG9nby1w/bmdfc2Vla2xvZ28t/NDA1MjU0LnBuZw"
+                alt="Amazon Logo"
+                class="store-icon"
+              />
+              Amazon
+            </span>
+
+            <span class="store-badge">
+              <span class="store-icon text-emoji">📚</span>
+              Books to Scrape
+            </span>
+          </div>
+
+          <small class="error-message" *ngIf="apiErrorMessage">{{
+            apiErrorMessage
+          }}</small>
         </div>
 
         <div class="form-row">
