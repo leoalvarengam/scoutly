@@ -9,26 +9,27 @@ import {
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss',
 })
-export class LoginComponent {
+export class RegisterComponent {
   private fb = inject(FormBuilder);
-  loginForm: FormGroup;
+  registerForm: FormGroup;
 
   constructor() {
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
+      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      console.log('Realizando login: ', this.loginForm.value);
+    if (this.registerForm.valid) {
+      console.log('Formulário preenchido: ', this.registerForm.value);
     }
   }
 }

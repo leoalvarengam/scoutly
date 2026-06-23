@@ -1,0 +1,58 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="brand-header">
+      <img src="/logoScoutly.webp" alt="Scoutly" />
+      <h1>Criar Conta</h1>
+      <p>Junte-se ao Scoutly e comece a monitorar seus produtos.</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="name">Nome completo</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Como devemos te chamar?"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="seu@email.com"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Mínimo de 6 caracteres"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="registerForm.invalid"
+      >
+        Cadastrar
+      </button>
+    </form>
+
+    <div class="back-link">
+      <a routerLink="/">Voltar para o início</a>
+
+      <div class="login-text">
+        <span>Já possui conta?</span>
+        <a class="link-action" routerLink="/login">Entre aqui</a>
+      </div>
+    </div>
+  </div>
+</div>
