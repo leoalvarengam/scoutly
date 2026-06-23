@@ -1,1 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f7f5;
+  --bg-tertiary: #f1f3f5;
+  --bg-accent: #e8f7f1;
+
+  --text-main: #18201c;
+  --text-muted: #62706a;
+  --text-strong: #111814;
+
+  --border-color: rgba(24, 32, 28, 0.1);
+  --border-strong: rgba(24, 32, 28, 0.16);
+
+  --color-green: #0f9d68;
+  --color-green-dark: #0a7f55;
+  --color-green-light: #e4f5ee;
+
+  --color-yellow: #f59e0b;
+  --color-yellow-dark: #d97706;
+  --color-yellow-light: #fef3c7;
+
+  --color-surface: rgba(255, 255, 255, 0.78);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  color: var(--text-main);
+  background: var(--bg-secondary);
+}
