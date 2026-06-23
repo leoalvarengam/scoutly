@@ -8,11 +8,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { TrackingResponseDTO } from '../../models/tracking.model';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tracked-products',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './tracked-products.component.html',
   styleUrl: './tracked-products.component.scss',
 })
@@ -34,6 +35,10 @@ export class TrackedProductsComponent {
 
   ngOnInit(): void {
     this.loadProducts();
+  }
+
+  get activeProductsCount(): number {
+    return this.products.filter((product) => product.active).length;
   }
 
   loadProducts(): void {

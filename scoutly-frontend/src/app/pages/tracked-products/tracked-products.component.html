@@ -1,19 +1,30 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <div class="brand">
-      <img src="/logoScoutly.webp" alt="Scoutly">
+      <a routerLink="/">
+        <img src="/logoScoutly.webp" alt="Scoutly" />
+      </a>
     </div>
+
     <div class="quick-stats">
       <div class="stat-card">
-        <span class="stat-label">Produtos Monitorados</span>
-        <span class="stat-value text-green">{{ products.length }}</span>
+        <span class="stat-label">Ativos</span>
+        <span class="stat-value text-green">{{ activeProductsCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">{{ products.length }}</span>
       </div>
     </div>
   </header>
 
   <section class="form-section">
     <div class="card card-form">
-      <h2>Monitorar Novo Produto</h2>
+      <div class="section-heading">
+        <div>
+          <h2>Monitorar produto</h2>
+        </div>
+      </div>
 
       <form
         class="product-form"
@@ -21,7 +32,7 @@
         (ngSubmit)="onSubmit()"
       >
         <div class="form-group url-group">
-          <label for="url">URL do Produto</label>
+          <label for="url">URL do produto</label>
           <input
             type="url"
             id="url"
@@ -31,15 +42,14 @@
           />
 
           <div class="supported-stores">
-            <span class="store-label">Lojas compatíveis:</span>
+            <span class="store-label">Lojas compatíveis</span>
 
             <span class="store-badge">
               <img
-                src="https://imgs.search.brave.com/bg8ofBVym4MNAHCfdifc06KG46bnC625np9T2ttjC0o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzQwLzIvYW1hem9u/LWljb24tbG9nby1w/bmdfc2Vla2xvZ28t/NDA1MjU0LnBuZw"
-                alt="Amazon Logo"
+                src="https://cdn.brandfetch.io/idawOgYOsG/theme/dark/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B"
+                alt="Amazon"
                 class="store-icon"
               />
-              Amazon
             </span>
 
             <span class="store-badge">
@@ -55,7 +65,7 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="name">Apelido do Produto</label>
+            <label for="name">Apelido do produto</label>
             <input
               type="text"
               id="name"
@@ -64,12 +74,12 @@
             />
           </div>
           <div class="form-group">
-            <label for="targetPrice">Preço Alvo (R$)</label>
+            <label for="targetPrice">Preço alvo (R$)</label>
             <input
               type="number"
               id="targetPrice"
               formControlName="targetPrice"
-              placeholder="Ex: 1200.00"
+              placeholder="Ex: 1200,00"
               step="0.01"
             />
           </div>
@@ -80,7 +90,7 @@
           class="btn-submit"
           [disabled]="trackingForm.invalid"
         >
-          <span>Começar Rastreamento</span>
+          <span>Começar rastreamento</span>
         </button>
       </form>
     </div>
@@ -88,7 +98,9 @@
 
   <main class="products-section">
     <div class="section-title-row">
-      <h2>Seus Alertas Ativos</h2>
+      <div>
+        <h2>Produtos monitorados</h2>
+      </div>
     </div>
 
     <div class="products-grid">
@@ -112,14 +124,14 @@
               </span>
             </div>
             <h3 class="product-title">{{ product.name }}</h3>
-            <a [href]="product.url" target="_blank" class="product-link"
-              >Acessar link do produto</a
-            >
+            <a [href]="product.url" target="_blank" class="product-link">
+              Abrir link do produto
+            </a>
           </div>
 
           <div class="product-pricing">
             <div class="price-box current-price">
-              <span class="price-label">Preço Atual</span>
+              <span class="price-label">Preço atual</span>
               <span
                 class="price-value"
                 [ngClass]="{ 'text-green': product.currentPrice }"
@@ -134,7 +146,7 @@
             </div>
 
             <div class="price-box target-price">
-              <span class="price-label">Preço Alvo</span>
+              <span class="price-label">Preço alvo</span>
               <span class="price-value text-yellow">
                 {{ product.targetPrice | currency: "BRL" : "symbol" : "1.2-2" }}
               </span>
@@ -145,7 +157,7 @@
             <button
               class="btn-action btn-delete"
               (click)="deleteProduct(product.id)"
-              title="Excluir Alerta"
+              title="Excluir alerta"
             >
               <span>Excluir</span>
             </button>
@@ -153,7 +165,7 @@
             <button
               class="btn-action btn-toggle"
               (click)="toggleStatus(product.id)"
-              [title]="product.active ? 'Pausar Alerta' : 'Reativar Alerta'"
+              [title]="product.active ? 'Pausar alerta' : 'Reativar alerta'"
             >
               <span *ngIf="product.active">⏸ Pausar</span>
               <span *ngIf="!product.active">▶ Reativar</span>
