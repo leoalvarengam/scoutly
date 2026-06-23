@@ -1,5 +1,6 @@
 package com.leonardoalvarenga.scoutly.tracking;
 
+import com.leonardoalvarenga.scoutly.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,11 +50,11 @@ public class TrackedProduct {
     @OneToMany(mappedBy = "trackedProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PriceHistory> prices = new ArrayList<>();
 
-    public void deactivateAlert(){
-        this.active = false;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public void addPriceHistory(PriceHistory history){
+    public void addPriceHistory(PriceHistory history) {
         this.prices.add(history);
         history.setTrackedProduct(this);
     }
