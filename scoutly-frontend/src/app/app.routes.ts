@@ -3,6 +3,7 @@ import { TrackedProductsComponent } from './pages/tracked-products/tracked-produ
 import { LandingComponent } from './pages/landing/landing.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: TrackedProductsComponent,
+    canActivate: [authGuard],
   },
   {
     path: '**',
