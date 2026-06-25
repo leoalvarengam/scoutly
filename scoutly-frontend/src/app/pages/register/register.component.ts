@@ -6,7 +6,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,11 @@ import { RouterModule } from '@angular/router';
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   registerForm: FormGroup;
+  errorMessage: string | null = null;
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -29,7 +34,17 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      console.log('Formulário preenchido: ', this.registerForm.value);
+      this.authService.register(this.registerForm.value).subscribe({
+        next: () => {
+          alert('Conta criada com sucesso! Faça login para continuar.');
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          console.error('Erro no cadastro', err);
+          this.errorMessage =
+            err.error || 'Erro ao criar conta. Verifique os dados.';
+        },
+      });
     }
   }
 }

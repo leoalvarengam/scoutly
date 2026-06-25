@@ -9,17 +9,29 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
       <div class="form-group">
         <label for="email">E-mail</label>
-        <input type="email" id="email" formControlName="email" placeholder="seu@email.com" />
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="seu@email.com"
+        />
       </div>
       <div class="form-group">
         <label for="password">Senha</label>
-        <input type="password" id="password" formControlName="password" placeholder="••••••••" />
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="••••••••"
+        />
       </div>
 
       <button type="submit" class="btn-submit" [disabled]="loginForm.invalid">
         Entrar na Conta
       </button>
     </form>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <div class="back-link">
       <a routerLink="/">Voltar para o início</a>

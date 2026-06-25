@@ -6,7 +6,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,18 +18,30 @@ import { RouterModule } from '@angular/router';
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   loginForm: FormGroup;
+  errorMessage: string | null = null;
 
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      console.log('Realizando login: ', this.loginForm.value);
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error('Erro no login', err);
+          this.errorMessage = 'E-mail ou senha incorretos.';
+        },
+      });
     }
   }
 }
