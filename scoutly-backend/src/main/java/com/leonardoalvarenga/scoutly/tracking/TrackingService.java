@@ -7,6 +7,7 @@ import com.leonardoalvarenga.scoutly.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,9 +23,11 @@ public class TrackingService {
     private final TrackedProductRepository repository;
     private final RabbitTemplate rabbitTemplate;
 
-    private final UserRepository userRepository;
-
     private final List<String> supportedDomains = List.of("books.toscrape.com", "amazon.com.br", "amazon.com");
+
+    private User getAuthenticatedUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
     public TrackingResponseDTO add(TrackingRequestDTO dto) {
 
@@ -38,16 +41,7 @@ public class TrackingService {
         entity.setUrl(dto.url());
         entity.setTargetPrice(dto.targetPrice());
 
-        User mockUser = userRepository.findByEmail("mock@scoutly.com")
-                .orElseGet(() -> {
-                    User newUser = new User();
-                    newUser.setName("Usuário Teste");
-                    newUser.setEmail("mock@scoutly.com");
-                    newUser.setGuest(true);
-                    return userRepository.save(newUser);
-                });
-
-        entity.setUser(mockUser);
+        entity.setUser(getAuthenticatedUser());
 
         TrackedProduct savedEntity = repository.save(entity);
 
@@ -72,7 +66,9 @@ public class TrackingService {
     }
 
     public List<TrackingResponseDTO> findAll() {
-        return repository.findAll()
+        User currentUser = getAuthenticatedUser();
+
+        return repository.findByUser(currentUser)
                 .stream()
                 .map(product -> {
                     BigDecimal latestPrice = product.getPrices().isEmpty()

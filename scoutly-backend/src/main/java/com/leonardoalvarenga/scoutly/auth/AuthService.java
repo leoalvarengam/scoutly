@@ -50,7 +50,7 @@ public class AuthService {
         String guestEmail = "guest_" + guestId + "@scoutly.local";
 
         User guestUser = new User();
-        guestUser.setName("Recrutador Avaliador");
+        guestUser.setName("Visitante");
         guestUser.setEmail(guestEmail);
         guestUser.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
         guestUser.setGuest(true);
