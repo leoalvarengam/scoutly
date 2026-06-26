@@ -5,6 +5,7 @@ import com.leonardoalvarenga.scoutly.auth.dtos.LoginRequestDTO;
 import com.leonardoalvarenga.scoutly.auth.dtos.RegisterRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,8 +16,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO data) {
-        return ResponseEntity.ok(authService.login(data));
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO data) {
+        try {
+            return ResponseEntity.ok(authService.login(data));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401).body("E-mail ou senha incorretos");
+        }
     }
 
     @PostMapping("/register")

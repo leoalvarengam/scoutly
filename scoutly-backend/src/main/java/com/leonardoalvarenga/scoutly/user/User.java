@@ -32,8 +32,8 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @Column(nullable = false)
-    private boolean isGuest;
+    @Column(name = "is_guest", nullable = false)
+    private boolean guest;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
