@@ -28,6 +28,7 @@ public class TokenService {
                 .setIssuer("Scoutly API")
                 .setSubject(user.getEmail())
                 .claim("isGuest", user.isGuest())
+                .claim("name", user.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expiration)))
                 .signWith(getSiginKey(), SignatureAlgorithm.HS256)

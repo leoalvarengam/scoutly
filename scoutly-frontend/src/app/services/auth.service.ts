@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 import { Observable, of, tap } from 'rxjs';
 
 @Injectable({
@@ -22,9 +23,7 @@ export class AuthService {
 
     const savedGuestToken = localStorage.getItem(this.GUEST_MEMORY_KEY);
     if (savedGuestToken) {
-      console.log(
-        'Recuperando conta da memória...',
-      );
+      console.log('Recuperando conta da memória...');
       this.saveToken(savedGuestToken);
       return of({ token: savedGuestToken });
     }
@@ -62,5 +61,21 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+  }
+
+  getUserInfo(): { name: string; email: string; isGuest: boolean } | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      return {
+        name: decoded.name,
+        email: decoded.sub,
+        isGuest: decoded.isGuest,
+      };
+    } catch (error) {
+      return null;
+    }
   }
 }

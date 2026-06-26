@@ -27,6 +27,7 @@ export class TrackedProductsComponent {
   products: TrackingResponseDTO[] = [];
   trackingForm: FormGroup;
   apiErrorMessage: string | null = null;
+  displayName = 'Usuário';
 
   constructor() {
     this.trackingForm = this.fb.group({
@@ -37,11 +38,11 @@ export class TrackedProductsComponent {
   }
 
   ngOnInit(): void {
+    const user = this.authService.getUserInfo();
+    if (user) {
+      this.displayName = user.name || 'Usuário';
+    }
     this.loadProducts();
-  }
-
-  get activeProductsCount(): number {
-    return this.products.filter((product) => product.active).length;
   }
 
   loadProducts(): void {

@@ -1,186 +1,143 @@
-<div class="dashboard-container">
+<div class="dashboard-shell">
   <header class="dashboard-header">
-    <div class="brand">
-      <a routerLink="/">
-        <img src="/logoScoutly.webp" alt="Scoutly" />
-      </a>
-    </div>
+    <a routerLink="/" class="brand-link">
+      <img src="/logoScoutly.webp" alt="Scoutly" />
+    </a>
 
-    <div class="header-right">
-      <div class="quick-stats">
-        <div class="stat-card">
-          <span class="stat-label">Ativos</span>
-          <span class="stat-value text-green">{{ activeProductsCount }}</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">Total</span>
-          <span class="stat-value">{{ products.length }}</span>
-        </div>
-      </div>
-
-      <button class="btn-logout" (click)="logout()" title="Sair da conta">
-        Sair
-      </button>
+    <div class="header-meta">
+      <span class="user-name">Olá, {{ displayName }}</span>
+      <button class="btn-logout" type="button" (click)="logout()">Sair</button>
     </div>
   </header>
 
-  <section class="form-section">
-    <div class="card card-form">
-      <div class="section-heading">
-        <div>
-          <h2>Monitorar produto</h2>
+  <section class="card form-card">
+    <form [formGroup]="trackingForm" (ngSubmit)="onSubmit()" class="form-grid">
+      <div class="field field-full">
+        <label for="url">URL do produto</label>
+        <input
+          id="url"
+          type="url"
+          formControlName="url"
+          (input)="apiErrorMessage = null"
+          placeholder="Cole o link da Amazon ou Books to Scrape"
+        />
+
+        <div class="chips">
+          <span class="chip">
+            <img
+              src="https://cdn.brandfetch.io/idawOgYOsG/theme/dark/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B"
+              alt="Amazon"
+            />
+            Amazon
+          </span>
+          <span class="chip">📚 Books to Scrape</span>
         </div>
+
+        <small class="error-message" *ngIf="apiErrorMessage">{{
+          apiErrorMessage
+        }}</small>
       </div>
 
-      <form
-        class="product-form"
-        [formGroup]="trackingForm"
-        (ngSubmit)="onSubmit()"
+      <div class="field">
+        <label for="name">Apelido do produto</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Ex: Monitor Gamer 24'"
+        />
+      </div>
+
+      <div class="field">
+        <label for="targetPrice">Preço alvo (R$)</label>
+        <input
+          id="targetPrice"
+          type="number"
+          formControlName="targetPrice"
+          placeholder="Ex: 1200,00"
+          step="0.01"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="trackingForm.invalid"
       >
-        <div class="form-group url-group">
-          <label for="url">URL do produto</label>
-          <input
-            type="url"
-            id="url"
-            formControlName="url"
-            (input)="apiErrorMessage = null"
-            placeholder="Cole o link da Amazon ou Books to Scrape"
-          />
-
-          <div class="supported-stores">
-            <span class="store-label">Lojas compatíveis</span>
-
-            <span class="store-badge">
-              <img
-                src="https://cdn.brandfetch.io/idawOgYOsG/theme/dark/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B"
-                alt="Amazon"
-                class="store-icon"
-              />
-            </span>
-
-            <span class="store-badge">
-              <span class="store-icon text-emoji">📚</span>
-              Books to Scrape
-            </span>
-          </div>
-
-          <small class="error-message" *ngIf="apiErrorMessage">{{
-            apiErrorMessage
-          }}</small>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">Apelido do produto</label>
-            <input
-              type="text"
-              id="name"
-              formControlName="name"
-              placeholder="Ex: Monitor Gamer 24'"
-            />
-          </div>
-          <div class="form-group">
-            <label for="targetPrice">Preço alvo (R$)</label>
-            <input
-              type="number"
-              id="targetPrice"
-              formControlName="targetPrice"
-              placeholder="Ex: 1200,00"
-              step="0.01"
-            />
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          class="btn-submit"
-          [disabled]="trackingForm.invalid"
-        >
-          <span>Começar rastreamento</span>
-        </button>
-      </form>
-    </div>
+        Começar rastreamento
+      </button>
+    </form>
   </section>
 
-  <main class="products-section">
-    <div class="section-title-row">
-      <div>
-        <h2>Produtos monitorados</h2>
-      </div>
-    </div>
+  <main class="products-grid">
+    @for (product of products; track product.id) {
+      <article class="card product-card" [class.inactive]="!product.active">
+        <div
+          class="card-topline"
+          [ngClass]="product.active ? 'bg-green' : 'bg-yellow'"
+        ></div>
 
-    <div class="products-grid">
-      @for (product of products; track product.id) {
-        <div class="card product-card" [class.inactive]="!product.active">
-          <div
-            class="card-status-strip"
-            [ngClass]="product.active ? 'bg-green' : 'bg-yellow'"
-          ></div>
-
-          <div class="product-info">
-            <div class="product-meta">
-              <span class="domain-tag"
-                >ID: {{ product.id.substring(0, 8) }}...</span
-              >
-              <span
-                class="status-badge"
-                [ngClass]="product.active ? 'tag-green' : 'tag-yellow'"
-              >
-                {{ product.active ? "Monitorando" : "Pausado" }}
-              </span>
-            </div>
-            <h3 class="product-title">{{ product.name }}</h3>
-            <a [href]="product.url" target="_blank" class="product-link">
-              Abrir link do produto
-            </a>
-          </div>
-
-          <div class="product-pricing">
-            <div class="price-box current-price">
-              <span class="price-label">Preço atual</span>
-              <span
-                class="price-value"
-                [ngClass]="{ 'text-green': product.currentPrice }"
-              >
-                {{
-                  product.currentPrice
-                    ? (product.currentPrice
-                      | currency: "BRL" : "symbol" : "1.2-2")
-                    : "Buscando..."
-                }}
-              </span>
-            </div>
-
-            <div class="price-box target-price">
-              <span class="price-label">Preço alvo</span>
-              <span class="price-value text-yellow">
-                {{ product.targetPrice | currency: "BRL" : "symbol" : "1.2-2" }}
-              </span>
-            </div>
-          </div>
-
-          <div class="card-actions">
-            <button
-              class="btn-action btn-delete"
-              (click)="deleteProduct(product.id)"
-              title="Excluir alerta"
+        <div class="product-head">
+          <div>
+            <span class="domain-tag"
+              >ID: {{ product.id.substring(0, 8) }}...</span
             >
-              <span>Excluir</span>
-            </button>
+            <h3>{{ product.name }}</h3>
+          </div>
+          <span
+            class="status-pill"
+            [ngClass]="product.active ? 'tag-green' : 'tag-yellow'"
+          >
+            {{ product.active ? "Monitorando" : "Pausado" }}
+          </span>
+        </div>
 
-            <button
-              class="btn-action btn-toggle"
-              (click)="toggleStatus(product.id)"
-              [title]="product.active ? 'Pausar alerta' : 'Reativar alerta'"
+        <a [href]="product.url" target="_blank" class="product-link"
+          >Abrir link do produto</a
+        >
+
+        <div class="price-grid">
+          <div>
+            <span class="price-label">Preço atual</span>
+            <span
+              class="price-value"
+              [ngClass]="{ 'text-green': product.currentPrice }"
             >
-              <span *ngIf="product.active">⏸ Pausar</span>
-              <span *ngIf="!product.active">▶ Reativar</span>
-            </button>
+              {{
+                product.currentPrice
+                  ? (product.currentPrice
+                    | currency: "BRL" : "symbol" : "1.2-2")
+                  : "Buscando..."
+              }}
+            </span>
+          </div>
+          <div>
+            <span class="price-label">Preço alvo</span>
+            <span class="price-value text-yellow">
+              {{ product.targetPrice | currency: "BRL" : "symbol" : "1.2-2" }}
+            </span>
           </div>
         </div>
-      } @empty {
-        <p class="empty-state">Nenhum produto sendo monitorado no momento.</p>
-      }
-    </div>
+
+        <div class="card-actions">
+          <button
+            type="button"
+            class="btn-action btn-delete"
+            (click)="deleteProduct(product.id)"
+          >
+            Excluir
+          </button>
+          <button
+            type="button"
+            class="btn-action"
+            (click)="toggleStatus(product.id)"
+          >
+            {{ product.active ? "Pausar" : "Reativar" }}
+          </button>
+        </div>
+      </article>
+    } @empty {
+      <p class="empty-state">Nenhum produto sendo monitorado no momento.</p>
+    }
   </main>
 </div>
