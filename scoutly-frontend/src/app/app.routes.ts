@@ -10,20 +10,24 @@ export const routes: Routes = [
   {
     path: '',
     component: LandingComponent,
+    title: 'Scoutly - Nunca mais perca uma queda de preço',
   },
   {
     path: 'login',
     component: LoginComponent,
+    title: 'Entrar | Scoutly',
     canActivate: [noAuthGuard],
   },
   {
     path: 'register',
     component: RegisterComponent,
+    title: 'Criar Conta | Scoutly',
     canActivate: [noAuthGuard],
   },
   {
     path: 'dashboard',
     component: TrackedProductsComponent,
+    title: 'Meu Painel | Scoutly',
     canActivate: [authGuard],
   },
   {

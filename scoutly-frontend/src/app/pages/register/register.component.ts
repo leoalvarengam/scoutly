@@ -24,6 +24,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   errorMessage: string | null = null;
   isLoading: boolean = false;
+  showPassword = false;
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -55,5 +56,9 @@ export class RegisterComponent {
         },
       });
     }
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 }

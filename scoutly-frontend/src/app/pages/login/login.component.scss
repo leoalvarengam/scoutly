@@ -64,6 +64,7 @@
   }
 
   input {
+    width: 100%;
     padding: 0.85rem 1rem;
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -76,6 +77,42 @@
       outline: none;
       border-color: var(--color-green);
       box-shadow: 0 0 0 3px var(--bg-accent);
+    }
+  }
+
+  .password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input {
+      padding-right: 2.8rem;
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      right: 0.8rem;
+      background: none;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #94a3b8;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--color-green);
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      svg {
+        pointer-events: none;
+      }
     }
   }
 }

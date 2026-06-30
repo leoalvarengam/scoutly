@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string | null = null;
   isLoading: boolean = false;
   successMessage: string | null = null;
+  showPassword = false;
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -59,5 +60,9 @@ export class LoginComponent implements OnInit {
         },
       });
     }
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 }
