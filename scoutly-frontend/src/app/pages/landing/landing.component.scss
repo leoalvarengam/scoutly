@@ -119,6 +119,17 @@
   margin-top: 0.5rem;
 }
 
+.error-alert {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid #f87171;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -335,5 +346,17 @@
     h2 {
       font-size: 1.25rem;
     }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

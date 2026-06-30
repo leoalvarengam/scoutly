@@ -14,6 +14,7 @@
           id="email"
           formControlName="email"
           placeholder="seu@email.com"
+          autofocus
         />
       </div>
       <div class="form-group">
@@ -26,12 +27,23 @@
         />
       </div>
 
-      <button type="submit" class="btn-submit" [disabled]="loginForm.invalid">
-        Entrar na Conta
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        <span *ngIf="!isLoading">Entrar na Conta</span>
+        <span *ngIf="isLoading">Entrando...</span>
       </button>
     </form>
 
-    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="success-alert">
+      {{ successMessage }}
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
 
     <div class="back-link">
       <a routerLink="/">Voltar para o início</a>

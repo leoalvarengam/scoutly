@@ -33,12 +33,15 @@
           <a routerLink="/register" class="btn-primary">
             <span>Começar agora</span>
           </a>
+
           <a
             (click)="startDemo()"
             class="btn-secondary"
-            style="cursor: pointer"
+            [style.cursor]="isLoadingDemo ? 'wait' : 'pointer'"
+            [style.opacity]="isLoadingDemo ? '0.7' : '1'"
           >
-            <span>Ver demonstração</span>
+            <span *ngIf="!isLoadingDemo">Ver demonstração</span>
+            <span *ngIf="isLoadingDemo">Preparando...</span>
           </a>
         </ng-container>
 
@@ -47,6 +50,14 @@
             <span>Acessar meu Painel</span>
           </a>
         </ng-container>
+      </div>
+
+      <div
+        *ngIf="demoErrorMessage"
+        class="error-alert"
+        style="margin-top: 1rem"
+      >
+        {{ demoErrorMessage }}
       </div>
 
       <div class="feature-strip" aria-label="Recursos principais">

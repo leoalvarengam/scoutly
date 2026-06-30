@@ -44,9 +44,10 @@
       <button
         type="submit"
         class="btn-submit"
-        [disabled]="registerForm.invalid"
+        [disabled]="registerForm.invalid || isLoading"
       >
-        Cadastrar
+        <span *ngIf="!isLoading">Criar conta</span>
+        <span *ngIf="isLoading">Criando...</span>
       </button>
     </form>
 

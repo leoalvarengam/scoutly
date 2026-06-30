@@ -15,19 +15,32 @@ export class LandingComponent implements OnInit {
   private router = inject(Router);
 
   isUserLoggedIn: boolean = false;
+  isLoadingDemo: boolean = false;
+  demoErrorMessage: string | null = null;
 
   ngOnInit(): void {
     this.isUserLoggedIn = this.authService.isLoggedIn();
   }
 
   startDemo(): void {
+    if (this.isLoadingDemo) return;
+
+    this.isLoadingDemo = true;
+    this.demoErrorMessage = null;
+
     this.authService.guestLogin().subscribe({
       next: () => {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         console.error('Erro ao iniciar demo', err);
-        alert('Não foi possível iniciar demonstração no momento.');
+        this.demoErrorMessage =
+          'Não foi possível iniciar a demonstração no momento. Tente novamente.';
+        this.isLoadingDemo = false;
+
+        setTimeout(() => {
+          this.demoErrorMessage = null;
+        }, 5000);
       },
     });
   }

@@ -23,6 +23,7 @@ export class RegisterComponent {
 
   registerForm: FormGroup;
   errorMessage: string | null = null;
+  isLoading: boolean = false;
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -34,15 +35,23 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = null;
+
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
-          alert('Conta criada com sucesso! Faça login para continuar.');
-          this.router.navigate(['/login']);
+          this.router.navigate(['/login'], {
+            state: {
+              successMessage:
+                'Conta criada com sucesso! Faça login para continuar.',
+            },
+          });
         },
         error: (err) => {
           console.error('Erro no cadastro', err);
           this.errorMessage =
             err.error || 'Erro ao criar conta. Verifique os dados.';
+          this.isLoading = false;
         },
       });
     }

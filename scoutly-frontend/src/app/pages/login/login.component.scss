@@ -105,6 +105,19 @@
   }
 }
 
+.success-alert {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 12px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid #bbf7d0;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
 .error-message {
   margin-top: 12px;
   color: #dc2626;
@@ -164,5 +177,17 @@
     h1 {
       font-size: 1.45rem;
     }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
