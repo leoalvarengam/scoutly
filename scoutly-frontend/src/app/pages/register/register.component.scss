@@ -82,6 +82,17 @@
   }
 }
 
+.error-alert {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid #f87171;
+}
+
 .btn-submit {
   margin-top: 0.35rem;
   background: linear-gradient(180deg, var(--color-green) 0%, var(--color-green-dark) 100%);
