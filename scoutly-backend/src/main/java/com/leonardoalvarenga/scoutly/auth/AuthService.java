@@ -3,9 +3,11 @@ package com.leonardoalvarenga.scoutly.auth;
 import com.leonardoalvarenga.scoutly.auth.dtos.AuthResponseDTO;
 import com.leonardoalvarenga.scoutly.auth.dtos.LoginRequestDTO;
 import com.leonardoalvarenga.scoutly.auth.dtos.RegisterRequestDTO;
+import com.leonardoalvarenga.scoutly.notification.EmailService;
 import com.leonardoalvarenga.scoutly.user.User;
 import com.leonardoalvarenga.scoutly.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +18,13 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository tokenRepository;
+    private final EmailService emailService;
 
     public AuthResponseDTO login(LoginRequestDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
@@ -59,5 +64,47 @@ public class AuthService {
 
         var token = tokenService.generateToken(guestUser);
         return new AuthResponseDTO(token);
+    }
+
+    public void requestPasswordReset(String email) {
+        var userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return;
+        }
+
+        User user = userOptional.get();
+
+        String token = UUID.randomUUID().toString();
+        PasswordResetToken resetToken = new PasswordResetToken(token, user);
+
+        tokenRepository.save(resetToken);
+
+        String resetLink = "http://localhost:4200/reset-password?token=" + token;
+        String htmlBody = "<div style=\"font-family: Arial, sans-serif; color: #333;\">"
+                + "<h2 style=\"color: #642FD0;\">Recuperação de Senha - Scoutly</h2>"
+                + "<p>Olá, " + user.getName() + "!</p>"
+                + "<p>Recebemos um pedido para redefinir a sua senha. Clique no botão abaixo para criar uma nova (o link expira em 15 minutos):</p>"
+                + "<a href=\"" + resetLink + "\" style=\"display: inline-block; padding: 10px 20px; background-color: #642FD0; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;\">Criar Nova Senha</a>"
+                + "<p style=\"margin-top: 20px; font-size: 0.8rem; color: #666;\">Se você não solicitou esta alteração, apenas ignore este e-mail.</p>"
+                + "</div>";
+
+        emailService.sendHtmlEmail(user.getEmail(), "Redefinição de Senha - Scoutly", htmlBody);
+    }
+
+    public void resetPassword(String token, String newPassword){
+        PasswordResetToken resetToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Token inválido ou não encontrado."));
+
+        if(resetToken.isExpired()){
+            tokenRepository.delete(resetToken);
+            throw new RuntimeException("Este link já expirou. Tente novamente");
+        }
+
+        User user = resetToken.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        tokenRepository.delete(resetToken);
     }
 }
