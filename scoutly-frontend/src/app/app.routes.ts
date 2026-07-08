@@ -6,6 +6,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { authGuard } from './core/guards/auth.guard';
 import { noAuthGuard } from './core/guards/no-auth.guard';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,12 @@ export const routes: Routes = [
     path: 'forgot-password',
     component: ForgotPasswordComponent,
     title: 'Recuperar Senha | Scoutly',
+    canActivate: [noAuthGuard],
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+    title: 'Nova Senha | Scoutly',
     canActivate: [noAuthGuard],
   },
   {
