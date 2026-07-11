@@ -2,6 +2,7 @@ package com.leonardoalvarenga.scoutly.tracking;
 
 import com.leonardoalvarenga.scoutly.messaging.RabbitMQConfig;
 import com.leonardoalvarenga.scoutly.messaging.ScrapeProductMessage;
+import com.leonardoalvarenga.scoutly.notification.PriceAlertDTO;
 import com.leonardoalvarenga.scoutly.user.User;
 import com.leonardoalvarenga.scoutly.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class TrackingService {
 
     private final List<String> supportedDomains = List.of("books.toscrape.com", "amazon.com.br", "amazon.com");
 
-    private User getAuthenticatedUser(){
+    private User getAuthenticatedUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
@@ -106,12 +107,27 @@ public class TrackingService {
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
 
         PriceHistory history = new PriceHistory();
-
         history.setPrice(dto.price());
 
         product.addPriceHistory(history);
-
         repository.save(product);
+
+        if (dto.price().compareTo(product.getTargetPrice()) <= 0) {
+            PriceAlertDTO alert = new PriceAlertDTO(
+                    product.getUser().getEmail(),
+                    product.getUser().getName(),
+                    product.getName(),
+                    product.getUrl(),
+                    product.getTargetPrice(),
+                    dto.price()
+            );
+
+            rabbitTemplate.convertAndSend(
+                    "scoutly.alerts.exchange",
+                    "price.alerts.routing.key",
+                    alert
+            );
+        }
     }
 
     private String extractDomain(String urlString) {
