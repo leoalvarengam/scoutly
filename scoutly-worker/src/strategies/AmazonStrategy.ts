@@ -3,6 +3,7 @@ import { IScraperStrategy } from "../domain/IScraperStrategy.js";
 
 export class AmazonStrategy implements IScraperStrategy {
   executionType: "PUPPETEER" = "PUPPETEER";
+  waitForSelector: string = ".a-price-whole";
 
   extractPrice($: CheerioAPI): number | null {
     const wholeText = $(".a-price-whole").first().text();

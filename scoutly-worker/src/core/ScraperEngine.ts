@@ -66,6 +66,11 @@ export class ScraperEngine {
 
       const page = await browser.newPage();
 
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      );
+      await page.setViewport({ width: 1366, height: 768 });
+
       await page.setRequestInterception(true);
       page.on("request", (req) => {
         if (["image", "stylesheet", "font"].includes(req.resourceType())) {
@@ -76,6 +81,18 @@ export class ScraperEngine {
       });
 
       await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
+
+      if (strategy.waitForSelector) {
+        try {
+          await page.waitForSelector(strategy.waitForSelector, {
+            timeout: 5000,
+          });
+        } catch (e) {
+          console.log(
+            `[Engine] Aviso: Seletor '${strategy.waitForSelector}' não carregou a tempo.`,
+          );
+        }
+      }
 
       const html = await page.content();
 
