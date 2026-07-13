@@ -1,8 +1,22 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import express from "express";
 import amqp from "amqplib";
 import { ScraperEngine } from "./core/ScraperEngine.js";
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+  res.send("Worker está online e escutando a fila do RabbitMQ.");
+});
+
+app.listen(PORT, () => {
+  console.log(
+    `[*] Rodando na porta ${PORT}.`,
+  );
+});
 
 async function startWorker() {
   const queue = "scoutly.scraping.queue";
