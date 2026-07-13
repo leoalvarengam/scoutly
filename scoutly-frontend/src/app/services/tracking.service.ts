@@ -5,6 +5,7 @@ import {
   TrackingRequestDTO,
   TrackingResponseDTO,
 } from '../models/tracking.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ import {
 export class TrackingService {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:8080/api/tracking';
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   getTrackedProducts(): Observable<TrackingResponseDTO[]> {
     return this.http.get<TrackingResponseDTO[]>(this.apiUrl);
