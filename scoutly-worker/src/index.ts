@@ -6,11 +6,16 @@ import { ScraperEngine } from "./core/ScraperEngine.js";
 
 async function startWorker() {
   const queue = "scoutly.scraping.queue";
-  const rabbitUrl = "amqp://scoutly_user:scoutly_pass@localhost:5672";
+  const rabbitUrl = process.env.RabbitMQ_URL;
   const webhookSecret = process.env.SCOUTLY_WEBHOOK_SECRET;
+  const backendUrl = process.env.BACKEND_URL;
 
   if (!webhookSecret) {
     throw new Error("SCOUTLY_WEBHOOK_SECRET não configurada.");
+  }
+
+  if (!rabbitUrl) {
+    throw new Error("RABBITMQ_URL não configurada.");
   }
 
   try {
@@ -44,7 +49,7 @@ async function startWorker() {
           }
 
           const response = await fetch(
-            "http://localhost:8080/api/tracking/webhook/price",
+            `${backendUrl}/api/tracking/webhook/price`,
             {
               method: "POST",
               headers: {
