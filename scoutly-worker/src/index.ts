@@ -6,7 +6,7 @@ import { ScraperEngine } from "./core/ScraperEngine.js";
 
 async function startWorker() {
   const queue = "scoutly.scraping.queue";
-  const rabbitUrl = process.env.RabbitMQ_URL;
+  const rabbitUrl = process.env.RABBITMQ_URL;
   const webhookSecret = process.env.SCOUTLY_WEBHOOK_SECRET;
   const backendUrl = process.env.BACKEND_URL;
 
